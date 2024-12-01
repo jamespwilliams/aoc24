@@ -1,17 +1,15 @@
 lines = File.read_lines("input")
 
 locations = lines.map { |line|
-  ids = line.split(" ")
-  {ids[0].to_i, ids[-1].to_i}
+  Tuple(Int32, Int32).from(line.split.map(&.to_i))
 }
 
-lefts = locations.map { |l| l[0] }.sort
-rights = locations.map { |l| l[1] }.sort
+lefts = locations.map(&.first)
+rights = locations.map(&.last)
 
-right_counts = rights.reduce({} of Int32 => Int32) { |counts, id|
-  counts[id] = 0 unless counts.has_key?(id)
-  counts[id] += 1
-  counts
+right_counts = Hash(Int32, Int32).new(0)
+rights.each { |id|
+  right_counts[id] += 1
 }
 
-puts lefts.map { |id| (right_counts.fetch(id, 0) * id) }.sum
+puts lefts.map { |id| right_counts[id] * id }.sum

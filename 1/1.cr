@@ -1,13 +1,12 @@
 lines = File.read_lines("input")
 
 locations = lines.map { |line|
-  ids = line.split(" ")
-  {ids[0].to_i, ids[-1].to_i}
+  Tuple(Int32, Int32).from(line.split.map(&.to_i))
 }
 
-lefts = locations.map { |l| l[0] }.sort
-rights = locations.map { |l| l[1] }.sort
+lefts = locations.map(&.first).sort
+rights = locations.map(&.last).sort
 
-diffs = lefts.zip(rights).map { |left, right| (left - right).abs }
+diffs = lefts.zip(rights).map { |l, r| (l - r).abs }
 
 puts diffs.sum
